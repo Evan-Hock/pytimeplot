@@ -10,6 +10,7 @@ pip install timeplot
 Plot the runtime of a function based on input data.
 
 Keyword arguments:
+
 fs -- either a single function or list of functions to be tested
 
 input\_data\_sets-- either a set of data to be input into the function or a list of sets. each set can be either a set of single arguments to be directly
@@ -21,11 +22,12 @@ filename -- output filename (default "")
         * pdf
         * svg
         
-interps -- whether or not to interpret the data in input\_data\_set as a collection. if TRUE, it will be interpreted as such (default cycle(True))
+interps -- whether or not to interpret the data in each set of input\_data\_set as a collection. if TRUE, it will be interpreted as such (default cycle(True))
 
 test\_params -- the names of the parameters to be tested as strings, iff input\_data\_set is a set of dicts represents kwargs (default cycle(""))
 
 Keyword-only arguments:
+
 plot\_options -- options for the plot's display, as a dictionary
     options include:
         * title
@@ -86,6 +88,7 @@ the original results and embellished timing data.
 Measure the runtime performance of a function with differently-sized inputs and return a dataframe with that information.
 
 Keyword arguments:
+
 f -- the function to be tested
 
 input\_data\_set -- the set of data be input into the function. can be either a set of single arguments to be directly
