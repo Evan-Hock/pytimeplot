@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from functools import partial
 from itertools import repeat
 from logging import error, warning
@@ -64,13 +64,13 @@ def make_timedata(f: Callable,
     return pd.DataFrame(zip(input_sizes, output_times))
 
  
-def timeplot(fs: Callable | list[Callable],
-             input_data_sets: set | list[set],
+def timeplot(fs: Callable | Iterable[Callable],
+             input_data_sets: set | Iterable[set],
              filename: str = "",
-             interps=repeat(True),
-             test_params=repeat(""), *,
+             interps: bool | Iterable[bool] = repeat(True),
+             test_params: str | Iterable[str] = repeat(""), *,
              plot_options: dict = {},
-             legends=None,
+             legends: None | str | Iterable[str],
              preview_plot: bool = True):
     """Plot the runtime of a function based on input data.
 
@@ -79,11 +79,15 @@ def timeplot(fs: Callable | list[Callable],
     input_data_sets-- either a set of data to be input into the function or a list of sets. each set can be either a set of single arguments to be directly
         inputted or a set of dicts representing kwargs
     filename -- output filename (default "")
+        supported formats include, but are not limited to:
+            - png
+            - pdf
+            - svg
     interps -- whether or not to interpret the data in input_data_set as a collection. if TRUE, it will be interpreted as such (default cycle(True))
     test_params -- the names of the parameters to be tested as strings, iff input_data_set is a set of dicts represents kwargs (default cycle(""))
 
     Keyword-only arguments:
-    plot_options -- options for the plot's display
+    plot_options -- options for the plot's display, as a dictionary
         options include:
             - title
             - x-label
@@ -101,25 +105,22 @@ def timeplot(fs: Callable | list[Callable],
         "colors": DEFAULT_COLORS
     }
 
-    if isinstance(fs, Callable):
-        fs = [fs]
+    zipped_parameters = tuple(zip(*[[p] if not isinstance(p, Iterable) or isinstance(p, str) or isinstance(p, set) else p for p in [fs, input_data_sets, interps, test_params]]))
 
-    if isinstance(input_data_sets, set):
-        input_data_sets = [input_data_sets]
+    if isinstance(fs, Iterable) and len(fs) != len(zipped_parameters):
+        raise ValueError("One of input_data_sets, interps, or test_params is too short: should be at least {} in length".format(len(fs)))
 
-    zipped_parameters = zip(fs, input_data_sets, interps, test_params)
+    if isinstance(legends, str):
+        legends = [legends]
 
-    if len(fs) != len(list(zipped_parameters)):
-        raise ValueError(f"One of input_data_sets, interps, or test_params is too short: should be at least {len(fs)} in length")
+    if legends is not None and len(zipped_parameters) != len(legends):
+        raise ValueError("Legends is short: should be at least {} in length".format(len(zipped_parameters)))
 
-    if legends is not None and len(fs) != len(legends):
-        raise ValueError(f"Number of fs ({len(fs)}) must be equal to number of legends ({len(legends)})")
-
-    timedata = [make_timedata(*args) for args in zip(fs, input_data_sets, interps, test_params)]
+    timedata = [make_timedata(*args) for args in zipped_parameters]
 
     real_plot_options = DEFAULT_PLOT_OPTIONS | plot_options
 
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
     plt.title(real_plot_options["title"])
     plt.xlabel(real_plot_options["xlabel"])
     plt.ylabel(real_plot_options["ylabel"])
@@ -132,7 +133,7 @@ def timeplot(fs: Callable | list[Callable],
     
     if filename:
         try:
-            fig.savefig(filename)
+            plt.savefig(filename)
         except IOError as ioe:
             error(ioe)
 
