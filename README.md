@@ -52,7 +52,7 @@ preview\_plot -- whether or not to display a preview of the plot in a window (de
 
 ## Basic usage
 ```py
-from timeplot import timeplot
+from pytimeplot import timeplot
 
 # This assumes that you do not want to save it to a file, input the data directly as the ONLY parameter to the function,
 # and use the default interpretation of "size" (collection interpretation)
@@ -61,7 +61,7 @@ timeplot(function_list_or_single_function, list_of_sets_containing_data_or_singl
 
 ## Some more advanced usage
 ```py
-from timeplot import timeplot
+from pytimeplot import timeplot
 
 # Write output to a file
 # supported types:
