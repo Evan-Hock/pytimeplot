@@ -3,10 +3,19 @@ Time graph plotting library for OSU CS325
 
 ## Installation
 ```
-pip install timeplot
+pip install pytimeplot
 ```
 
-## timeplot.timeplot
+## What you came for
+pytimeplot.timeplot(fs: Callable | Iterable[Callable],
+                    input\_data\_sets: set | Iterable[set],
+                    filename: str = "",
+                    interps: bool | Iterable[bool] = itertools.repeat(True),
+                    test\_params: str | Iterable[str] = itertools.repeat(""), \*,
+                    plot\_options: dict = {},
+                    legends: None | str | Iterable[str] = None,
+                    preview\_plot: bool = True)
+
 Plot the runtime of a function based on input data.
 
 Keyword arguments:
@@ -15,6 +24,7 @@ fs -- either a single function or list of functions to be tested
 
 input\_data\_sets-- either a set of data to be input into the function or a list of sets. each set can be either a set of single arguments to be directly
     inputted or a set of dicts representing kwargs
+    known bug (I'm not going to bother fixing it): if multiple sets of data, do not put them in a set object. Use another iterable for more predictable behavior.
     
 filename -- output filename (default "")
     supported formats include, but are not limited to:
@@ -71,7 +81,7 @@ timeplot(fs, sets, interps=repeat(False))
 ```
 
 ## Other functions
-**timeplot.with\_timer(f: Callable) -> Callable**
+**pytimeplot.with_timer(f: Callable) -> Callable**
 
 Embellish a function with timing information.
 
@@ -80,10 +90,10 @@ to that original function but returning a tuple containing
 the original results and embellished timing data.
 
 
-**timeplot.make\_timedata(f: Callable,
-                        input\_set\_data: set,
-                        interp\_as\_coll: bool = True,
-                        testing\_parameter: str = "") -> pandas.DataFrame**
+**pytimeplot.make_timedata(f: Callable,
+                        input_set_data: set,
+                        interp_as_coll: bool = True,
+                        testing_parameter: str = "") -> pandas.DataFrame**
                         
 Measure the runtime performance of a function with differently-sized inputs and return a dataframe with that information.
 
