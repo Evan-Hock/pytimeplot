@@ -70,7 +70,7 @@ def timeplot(fs: Callable | Iterable[Callable],
              interps: bool | Iterable[bool] = repeat(True),
              test_params: str | Iterable[str] = repeat(""), *,
              plot_options: dict = {},
-             legends: None | str | Iterable[str],
+             legends: None | str | Iterable[str] = None,
              preview_plot: bool = True):
     """Plot the runtime of a function based on input data.
 
@@ -83,8 +83,8 @@ def timeplot(fs: Callable | Iterable[Callable],
             - png
             - pdf
             - svg
-    interps -- whether or not to interpret the data in input_data_set as a collection. if TRUE, it will be interpreted as such (default cycle(True))
-    test_params -- the names of the parameters to be tested as strings, iff input_data_set is a set of dicts represents kwargs (default cycle(""))
+    interps -- whether or not to interpret the data in input_data_set as a collection. if TRUE, it will be interpreted as such (default repeat(True))
+    test_params -- the names of the parameters to be tested as strings, iff input_data_set is a set of dicts represents kwargs (default repeat(""))
 
     Keyword-only arguments:
     plot_options -- options for the plot's display, as a dictionary
