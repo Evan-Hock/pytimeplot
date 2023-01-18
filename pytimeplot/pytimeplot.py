@@ -4,7 +4,7 @@ from collections.abc import Callable, Iterable
 from functools import partial
 from itertools import repeat
 from logging import error, warning
-from time import perf_counter
+from time import monotonic_ns
 from typing import Union
 
 from pycombinators import flip, identity
@@ -20,9 +20,9 @@ def with_timer(f: Callable) -> Callable:
     the original results and embellished timing data.
     """
     def timed_f(*args, **kwargs):
-        start = perf_counter()
+        start = monotonic_ns() // (10 ** 6)
         results = f(*args, **kwargs)
-        end = perf_counter()
+        end = monotonic_ns() // (10 ** 6)
         return results, end - start
 
     return timed_f
@@ -99,7 +99,7 @@ def timeplot(fs: Callable | Iterable[Callable],
     DEFAULT_PLOT_OPTIONS = {
         "title": "Size vs. Runtime",
         "xlabel": "Size of input",
-        "ylabel": "Runtime (s)",
+        "ylabel": "Runtime (ms)",
         "colors": DEFAULT_COLORS
     }
 
