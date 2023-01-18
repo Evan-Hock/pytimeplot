@@ -1,3 +1,5 @@
+__all__ = ['with_timer', 'make_timedata', 'timeplot']
+
 from collections.abc import Callable, Iterable
 from functools import partial
 from itertools import repeat
@@ -9,10 +11,6 @@ from pycombinators import flip, identity
 
 import pandas as pd
 import matplotlib.pyplot as plt
-
-
-__all__ = ['with_timer', 'make_timedata', 'timeplot']
-
 
 def with_timer(f: Callable) -> Callable:
     """Embellish a function with timing information.
